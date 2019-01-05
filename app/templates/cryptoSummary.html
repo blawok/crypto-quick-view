@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
+            <div class="collapse navbar-collapse navbar-ex1-collapse">
+                <ul class="nav navbar-nav side-nav">
+                    <li class="active">
+                        <a href="http://localhost:5000/cryptoSummary"><i class="fa fa-fw fa-dashboard"></i> Dashboard</a>
+                    </li>
+                    <li>
+                        <a href="http://localhost:5000/cryptoCharts"><i class="fa fa-fw fa-bar-chart-o"></i> Charts</a>
+                    </li>
+                    <li >
+                        <a href="http://localhost:5000/cryptoTables"><i class="fa fa-fw fa-table"></i> Tables</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </nav>
+
+        <div id="page-wrapper">
+
+            <div class="container-fluid">
+
+                <!-- Page Heading -->
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h1 class="page-header">
+                            Summary
+                            <small>QuickView</small>
+                        </h1>
+                        <ol class="breadcrumb">
+                            <li>
+                                <i class="fa fa-dashboard"></i>  <a href="index.html">Summary</a>
+                            </li>
+                            <li class="active">
+                                <i class="fa fa-file"></i> Summary
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+                <!-- /.row -->
+
+
+ <div>
+    <img src="data:image/png;base64, {{ plot_url }}" >
+ </div>
+
+
+{% endblock %}

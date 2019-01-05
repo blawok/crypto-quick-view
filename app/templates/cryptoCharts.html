@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+ <!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
+            <div class="collapse navbar-collapse navbar-ex1-collapse">
+                <ul class="nav navbar-nav side-nav">
+                    <li>
+                        <a href="http://localhost:5000/cryptoSummary"><i class="fa fa-fw fa-dashboard"></i> Dashboard</a>
+                    </li>
+                    <li class="active">
+                        <a href="http://localhost:5000/cryptoCharts"><i class="fa fa-fw fa-bar-chart-o"></i> Charts</a>
+                    </li>
+                    <li>
+                        <a href="http://localhost:5000/cryptoTables"><i class="fa fa-fw fa-table"></i> Tables</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </nav>
+
+        <div id="page-wrapper">
+
+            <div class="container-fluid">
+
+                <!-- Page Heading -->
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h1 class="page-header">
+                            Charts
+                            <small>QuickView</small>
+                        </h1>
+                        <ol class="breadcrumb">
+                            <li>
+                                <i class="fa fa-dashboard"></i>  <a href="index.html">Charts</a>
+                            </li>
+                            <li class="active">
+                                <i class="fa fa-file"></i> Charts
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+                <!-- /.row -->
+
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js'></script>
+
+
+<div class="container">
+  <div class="row">
+    <div class="col-lg-6">
+    
+    <h1>{{ titleLine }}</h1>
+
+    <canvas id="chart2" width="500" height="400" ></canvas>
+    <script>
+      // bar chart data
+      var barData = {
+        labels : [
+          {% for item in labels %}
+            "{{ item }}",
+          {% endfor %}
+        ],
+        datasets : [{
+          fillColor: "rgba(151,187,205,0.2)",
+          strokeColor: "rgba(151,187,205,1)",
+          pointColor: "rgba(151,187,205,1)",
+          pointStrokeColor: "#fff",
+          pointHighlightFill: "#fff",
+          pointHighlightStroke: "rgba(151,187,205,1)",
+          bezierCurve : false,
+          data : [
+	    {% for item in valuesLine %}
+              {{ item }},
+            {% endfor %}]
+          }
+	]
+      }
+      Chart.defaults.global.animationSteps = 50;
+      Chart.defaults.global.tooltipYPadding = 16;
+      Chart.defaults.global.tooltipCornerRadius = 0;
+      Chart.defaults.global.tooltipTitleFontStyle = "normal";
+      Chart.defaults.global.tooltipFillColor = "rgba(0,0,0,0.8)";
+      Chart.defaults.global.animationEasing = "easeOutBounce";
+      Chart.defaults.global.responsive = false;
+      Chart.defaults.global.scaleLineColor = "black";
+      Chart.defaults.global.scaleFontSize = 16;
+      // get bar chart canvas
+      var mychart2 = document.getElementById("chart2").getContext("2d");
+      // draw bar chart
+      var LineChartDemo = new Chart(mychart2).Line(barData, {
+        scaleOverride: false,
+        scaleShowVerticalLines: true,
+        scaleShowGridLines : true,
+        barShowStroke : true,
+        scaleShowLabels: true,
+        bezierCurve: false,
+      });
+    </script>
+  </div>
+
+   <div class="col-lg-6">
+    <h1>{{ titleBar }}</h1>
+
+
+    <canvas id="chart" width="500" height="400"></canvas>
+    <script>
+      // bar chart data
+      var barData = {
+        labels : [
+          {% for item in labels %}
+           "{{ item }}",
+          {% endfor %}
+	],
+        datasets : [{
+          fillColor: "rgba(151,187,205,0.2)",
+          strokeColor: "rgba(151,187,205,1)",
+          pointColor: "rgba(151,187,205,1)",
+          data : [
+            {% for item in valuesBar %}
+               "{{ item }}",
+              {% endfor %}
+	    ]
+          }
+        ]
+      }
+     // get bar chart canvas
+     var mychart = document.getElementById("chart").getContext("2d");
+     // draw bar chart
+     new Chart(mychart).Bar(barData, {
+       scaleOverride: false,
+       scaleShowVerticalLines: true,
+       scaleShowGridLines : true,
+       barShowStroke : true,
+       scaleShowLabels: true
+       }
+     );
+    </script>
+  </div>
+  </div>
+  </div>
+  </body>
+</html>
+
+{% endblock %}
