@@ -21,8 +21,8 @@ colors = [
 @app.route('/cryptoCharts')
 def charts():
 
-    df = cryptoInfoToDf()
-    labels =  list(df["Date"].apply(lambda x: x.strftime('%d-%m-%Y')))
+    df = executeSqlCrypto()
+    labels =  list(df["Date"])
     valuesLine = list(df["High"])
     valuesBar = list(df["Volume"])
 
