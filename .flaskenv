@@ -1,1 +1,2 @@
 FLASK_APP=cryptoQuick.py
+FLASK_DEBUG=1
