@@ -1,13 +1,28 @@
 import sqlite3
 import pandas as pd
+from datetime import datetime
 
-def executeSqlCrypto():
+def executeSqlCrypto(varCurrency = 'LSK', varFromDate = '2018-07-13',
+                     varToDate = '2018-08-1'):
     conn = sqlite3.connect('cryptoDB.db')
 
     # ? create cursor - tunnel to db
     c = conn.cursor()
 
-    df = pd.read_sql_query("select * from cryptoStats;", conn)
+    # fromDate = datetime.strptime(varFromDate, '%d-%m-%Y').strftime('%Y-%m-%d')
+    # toDate = datetime.strptime(varToDate, '%d-%m-%Y').strftime('%Y-%m-%d')
+
+    query = """
+            select *
+            from cryptoStats
+            where Currency = "{a}"
+                and Date between "{b}" and "{c}";
+            """.format(a = varCurrency,
+                       b = varFromDate,
+                       c = varToDate)
+
+    df = pd.read_sql_query(query, conn)
+
     # ? execute the commend and iteterate through results using iterator
     # for row in c.execute('SELECT * FROM cryptoStats'):
     #     print(row)
@@ -26,4 +41,4 @@ def executeSqlCrypto():
     conn.close()
     return df
 
-# executeSqlCrypto()
+# print(executeSqlCrypto())
