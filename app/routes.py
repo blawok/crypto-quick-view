@@ -3,7 +3,7 @@ from flask import (render_template, Flask, Markup, flash, redirect, request,
                    session, redirect, url_for)
 from flask_table import Table, Col
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, BooleanField, DateTimeField, RadioField, SelectField, TextField, TextAreaField
+from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired
 
 import pandas as pd
@@ -46,7 +46,8 @@ def summary():
     fromDate = session['fromDate']
     tillDate = session['tillDate']
 
-    if session['currency'] != None and  session['fromDate']  != None and  session['tillDate']  != None:
+    if (session['currency'] != None and session['fromDate'] != None and
+        session['tillDate'] != None):
         df = executeSqlCrypto(varCurrency = '{}'.format(currency),
                               varFromDate = '{}'.format(fromDate),
                               varToDate = '{}'.format(tillDate))
@@ -67,7 +68,9 @@ def summary():
     img.seek(0)
     plot_url = base64.b64encode(img.getvalue()).decode()
 
-    return render_template('cryptoSummary.html', currency=currency, fromDate=fromDate, tillDate=tillDate, df=df, plot_url=plot_url)
+    return render_template('cryptoSummary.html', currency=currency,
+                           fromDate=fromDate, tillDate=tillDate, df=df,
+                           plot_url=plot_url)
 
 
 
@@ -78,7 +81,8 @@ def charts():
     fromDate = session['fromDate']
     tillDate = session['tillDate']
 
-    if session['currency'] != None and  session['fromDate']  != None and  session['tillDate']  != None:
+    if (session['currency'] != None and  session['fromDate'] != None and
+        session['tillDate'] != None):
         df = executeSqlCrypto(varCurrency = '{}'.format(currency),
                               varFromDate = '{}'.format(fromDate),
                               varToDate = '{}'.format(tillDate))
@@ -105,6 +109,21 @@ def charts():
 @app.route("/cryptoTables/")
 @app.route("/cryptoTables")
 def tables():
-    df = executeSqlCrypto()
+    currency = session['currency']
+    fromDate = session['fromDate']
+    tillDate = session['tillDate']
+
+    if (session['currency'] != None and  session['fromDate'] != None and
+        session['tillDate'] != None):
+        df = executeSqlCrypto(varCurrency = '{}'.format(currency),
+                              varFromDate = '{}'.format(fromDate),
+                              varToDate = '{}'.format(tillDate))
+    else:
+        currency = 'LSK'
+        fromDate = '2018-07-15'
+        tillDate = '2018-07-20'
+        df = executeSqlCrypto(varCurrency = '{}'.format(currency),
+                              varFromDate = '{}'.format(fromDate),
+                              varToDate = '{}'.format(tillDate))
     return render_template('cryptoTables.html',
                            tables=df.to_html(classes=["table table-bordered table-hover"]))
