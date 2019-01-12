@@ -1,8 +1,10 @@
 from app import app
-from flask import render_template, Flask, Markup, flash, redirect, request
+from flask import (render_template, Flask, Markup, flash, redirect, request,
+                   session, redirect, url_for)
 from flask_table import Table, Col
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField
+from wtforms import StringField, SubmitField, BooleanField, DateTimeField, RadioField, SelectField, TextField, TextAreaField
+from wtforms.validators import DataRequired
 
 import pandas as pd
 import seaborn as sns
@@ -12,38 +14,22 @@ import base64
 
 from scraper import cryptoInfoToDf
 from sqlCrypto import executeSqlCrypto
+from forms import InfoForm
 
 
-class InfoForm(FlaskForm):
-    currency = StringField("What currency?")
-    fromDate = StringField("From when?")
-    tillDate = StringField("Until when?")
-    submit = SubmitField('Submit')
-
-@app.route('/forms', methods=['GET','POST'])
-def print_forms():
-    currency = False
-    fromDate = False
-    tillDate = False
+@app.route('/forms', methods=['GET', 'POST'])
+def submit():
 
     form = InfoForm()
 
     if form.validate_on_submit():
-        currency = form.currency.data
-        form.currency.data = ''
-        fromDate = form.fromDate.data
-        form.fromDate.data = ''
-        tillDate = form.tillDate.data
-        form.tillDate.data = ''
+        session['currency'] = form.currency.data
+        session['fromDate'] = form.fromDate.data
+        session['tillDate'] = form.tillDate.data
 
-    return render_template('forms.html', form=form, currency=currency,
-                           fromDate=fromDate, tillDate=tillDate)
+        return redirect(url_for('summary'))
 
-
-@app.route('/')
-@app.route('/form')
-def print_form():
-    return render_template('form.html')
+    return render_template('forms.html', form=form)
 
 
 
@@ -56,11 +42,11 @@ def page_not_found(e):
 @app.route("/cryptoSummary/")
 @app.route("/cryptoSummary")
 def summary():
-    currency = request.args.get('currency')
-    fromDate = request.args.get('fromDate')
-    tillDate = request.args.get('tillDate')
+    currency = session['currency']
+    fromDate = session['fromDate']
+    tillDate = session['tillDate']
 
-    if currency != None and fromDate != None and tillDate != None:
+    if session['currency'] != None and  session['fromDate']  != None and  session['tillDate']  != None:
         df = executeSqlCrypto(varCurrency = '{}'.format(currency),
                               varFromDate = '{}'.format(fromDate),
                               varToDate = '{}'.format(tillDate))
@@ -88,8 +74,22 @@ def summary():
 @app.route('/cryptoCharts/')
 @app.route('/cryptoCharts')
 def charts():
+    currency = session['currency']
+    fromDate = session['fromDate']
+    tillDate = session['tillDate']
 
-    df = executeSqlCrypto()
+    if session['currency'] != None and  session['fromDate']  != None and  session['tillDate']  != None:
+        df = executeSqlCrypto(varCurrency = '{}'.format(currency),
+                              varFromDate = '{}'.format(fromDate),
+                              varToDate = '{}'.format(tillDate))
+    else:
+        currency = 'LSK'
+        fromDate = '2018-07-15'
+        tillDate = '2018-07-20'
+        df = executeSqlCrypto(varCurrency = '{}'.format(currency),
+                              varFromDate = '{}'.format(fromDate),
+                              varToDate = '{}'.format(tillDate))
+    # df = executeSqlCrypto()
     labels =  list(df["Date"])
     valuesLine = list(df["High"])
     valuesBar = list(df["Volume"])

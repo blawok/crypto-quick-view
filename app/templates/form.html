@@ -66,3 +66,17 @@
 </div>
 
 {% endblock %}
+
+
+{% comment %} <p>
+{% if currency %}
+You chose {{ currency }}
+{% else %}
+Please choose currency
+{% endif %}
+</p>
+
+<form method = "POST">
+    {{ form.currency.label }}{{ form.currency() }}
+    {{ form.submit() }}
+</form> {% endcomment %}

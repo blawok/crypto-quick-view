@@ -48,21 +48,26 @@
 
 <div class="col-lg-6">
 <h2> Fill it bitch </h2>
-<form action="{{ url_for('summary') }}">
-  <div class="form-group">
-        <label for='currency'> Currency: </label>
-        <input type="text" class="form-control" name='currency' value='LSK'>
-  </div>
-  <div class="form-group">
-        <label for='fromDate'> From: </label>
-        <input type="text" class="form-control" name='fromDate' placeholder="YYYY-MM-DD" value='2018-07-13' >
-  </div>
-  <div class="form-group">
-        <label for='tillDate'> Till: </label>
-        <input type="text" class="form-control" name='tillDate' placeholder="YYYY-MM-DD" value='2018-07-20'>
-  </div>
-    <button type="submit" class="btn btn-secondary">Submit</button>
+<p>
+{% if currency %}
+You chose {{ currency }} {{ fromDate }} {{ tillDate }}
+{% else %}
+Please choose something
+{% endif %}
+</p>
+
+<form method="POST">
+    {{ form.csrf_token }}
+    {{ form.currency.label }} {{ form.currency(class="form-control") }}
+    <br>
+    {{ form.fromDate.label }} {{ form.fromDate(class="form-control") }}
+    <br>
+    {{ form.tillDate.label }} {{ form.tillDate(class="form-control") }}
+    <br>
+    <input type="submit" value="Go">
 </form>
 </div>
+
+
 
 {% endblock %}
