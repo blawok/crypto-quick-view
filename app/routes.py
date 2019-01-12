@@ -17,6 +17,8 @@ from sqlCrypto import executeSqlCrypto
 from forms import InfoForm
 
 
+
+@app.route('/', methods=['GET', 'POST'])
 @app.route('/forms', methods=['GET', 'POST'])
 def submit():
 
