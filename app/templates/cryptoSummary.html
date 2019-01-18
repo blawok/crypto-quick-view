@@ -49,6 +49,12 @@
    <h2> From {{ session['fromDate'] }} to {{ session['tillDate'] }} </h2>
  </div>
 
+<div class="chart" id="scattergraph2">
+    <script>
+        var graphs = {{scatter2 | safe}};
+        Plotly.plot('scattergraph2',graphs,{});
+    </script>
+</div>
 
 <div class="chart" id="bargraph">
     <script>

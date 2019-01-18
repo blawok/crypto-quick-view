@@ -12,6 +12,6 @@ def cryptoInfoToDf (varCurrency = 'LSK', varFromDate = '13-02-2018',
     df = scraper.get_dataframe()
     return df
 
-# cryptoInfoToDf()
-# df = cryptoInfoToDf(varCurrency = 'LTC')
+# df = cryptoInfoToDf()
+# # df = cryptoInfoToDf(varCurrency = 'LTC')
 # print(df)

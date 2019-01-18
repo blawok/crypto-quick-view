@@ -49,20 +49,16 @@
 <div class="col-lg-6">
 <h2> Fill the form </h2>
 <p>
-{% if currency %}
-You chose {{ currency }} {{ fromDate }} {{ tillDate }}
-{% else %}
 Please choose something
-{% endif %}
 </p>
 
 <form method="POST">
     {{ form.csrf_token }}
-    {{ form.currency.label }} {{ form.currency(class="form-control") }}
+    {{ form.currency.label }} {{ form.currency(class="form-control", value='lisk') }}
     <br>
-    {{ form.fromDate.label }} {{ form.fromDate(class="form-control") }}
+    {{ form.fromDate.label }} {{ form.fromDate(class="form-control", value='2018-01-01') }}
     <br>
-    {{ form.tillDate.label }} {{ form.tillDate(class="form-control") }}
+    {{ form.tillDate.label }} {{ form.tillDate(class="form-control", value='2018-01-31') }}
     <br>
     <input type="submit" value="Go">
 </form>

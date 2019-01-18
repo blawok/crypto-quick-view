@@ -2,21 +2,19 @@ import sqlite3
 import pandas as pd
 from datetime import datetime
 
-def executeSqlCrypto(varCurrency = 'LSK', varFromDate = '2018-07-13',
-                     varToDate = '2018-08-1'):
+def executeSqlCrypto(varCurrency = 'lisk', varFromDate = '2018-01-01',
+                     varToDate = '2018-12-31'):
     conn = sqlite3.connect('cryptoDB.db')
 
     # ? create cursor (tunnel to db)
     c = conn.cursor()
 
-    # fromDate = datetime.strptime(varFromDate, '%d-%m-%Y').strftime('%Y-%m-%d')
-    # toDate = datetime.strptime(varToDate, '%d-%m-%Y').strftime('%Y-%m-%d')
-
     query = """
             select *
             from cryptoStats
             where Currency = "{a}"
-                and Date between "{b}" and "{c}";
+                and Date between "{b}" and "{c}"
+            order by Date desc;
             """.format(a = varCurrency,
                        b = varFromDate,
                        c = varToDate)

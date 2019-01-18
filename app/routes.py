@@ -14,11 +14,12 @@ import base64
 import plotly
 import plotly.graph_objs as go
 import json
+import sqlite3
 
 from scraper import cryptoInfoToDf
-from sqlCrypto import executeSqlCrypto
+from selectCrypto import executeSqlCrypto
 from forms import InfoForm
-from graphCreate import createBoxPlot
+from graphCreate import createPlot
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -49,7 +50,7 @@ def summary():
                               varFromDate = '{}'.format(fromDate),
                               varToDate = '{}'.format(tillDate))
     else:
-        currency = 'LSK'
+        currency = 'lisk'
         fromDate = '2018-07-15'
         tillDate = '2018-07-20'
         df = executeSqlCrypto(varCurrency = '{}'.format(currency),
@@ -74,13 +75,14 @@ def summary():
     plot_url1 = base64.b64encode(img1.getvalue()).decode()
 
 
-    bar = createBoxPlot(df, 'Date', 'Market Cap', 'bar')
-    scatter = createBoxPlot(df, 'Date', 'Market Cap', 'scatter')
+    bar = createPlot(df, 'Date', 'Volume', 'bar')
+    scatter = createPlot(df, 'Date', 'Market Cap', 'scatter')
+    scatter2 = createPlot(df, 'Date', 'Close', 'scatter')
 
     return render_template('cryptoSummary.html', currency=currency,
                            fromDate=fromDate, tillDate=tillDate, df=df,
                            plot_url=plot_url, plot_url1=plot_url1, bar=bar,
-                           scatter=scatter)
+                           scatter=scatter, scatter2=scatter2)
 
 
 
@@ -96,13 +98,13 @@ def charts():
                               varFromDate = '{}'.format(fromDate),
                               varToDate = '{}'.format(tillDate))
     else:
-        currency = 'LSK'
+        currency = 'lisk'
         fromDate = '2018-07-15'
         tillDate = '2018-07-20'
         df = executeSqlCrypto(varCurrency = '{}'.format(currency),
                               varFromDate = '{}'.format(fromDate),
                               varToDate = '{}'.format(tillDate))
-    # df = executeSqlCrypto()
+
     labels =  list(df["Date"])
     valuesLine = list(df["High"])
     valuesBar = list(df["Volume"])
@@ -127,7 +129,7 @@ def tables():
                               varFromDate = '{}'.format(fromDate),
                               varToDate = '{}'.format(tillDate))
     else:
-        currency = 'LSK'
+        currency = 'lisk'
         fromDate = '2018-07-15'
         tillDate = '2018-07-20'
         df = executeSqlCrypto(varCurrency = '{}'.format(currency),
