@@ -6,7 +6,7 @@ def executeSqlCrypto(varCurrency = 'LSK', varFromDate = '2018-07-13',
                      varToDate = '2018-08-1'):
     conn = sqlite3.connect('cryptoDB.db')
 
-    # ? create cursor - tunnel to db
+    # ? create cursor (tunnel to db)
     c = conn.cursor()
 
     # fromDate = datetime.strptime(varFromDate, '%d-%m-%Y').strftime('%Y-%m-%d')

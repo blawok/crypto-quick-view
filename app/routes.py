@@ -11,17 +11,19 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import io
 import base64
+import plotly
+import plotly.graph_objs as go
+import json
 
 from scraper import cryptoInfoToDf
 from sqlCrypto import executeSqlCrypto
 from forms import InfoForm
-
+from graphCreate import createBoxPlot
 
 
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/forms', methods=['GET', 'POST'])
 def submit():
-
     form = InfoForm()
 
     if form.validate_on_submit():
@@ -35,21 +37,14 @@ def submit():
 
 
 
-@app.errorhandler(404)
-def page_not_found(e):
-    return render_template('404.html'), 404
-
-
-
 @app.route("/cryptoSummary/")
 @app.route("/cryptoSummary")
 def summary():
-    currency = session['currency']
-    fromDate = session['fromDate']
-    tillDate = session['tillDate']
-
-    if (session['currency'] != None and session['fromDate'] != None and
-        session['tillDate'] != None):
+    if ('currency' in session and 'fromDate' in session and
+        'tillDate' in session):
+        currency = session['currency']
+        fromDate = session['fromDate']
+        tillDate = session['tillDate']
         df = executeSqlCrypto(varCurrency = '{}'.format(currency),
                               varFromDate = '{}'.format(fromDate),
                               varToDate = '{}'.format(tillDate))
@@ -64,27 +59,39 @@ def summary():
     img = io.BytesIO()
     sns.set(style="darkgrid")
     fig, ax =  plt.subplots(1,2, figsize=(11,6))
-    sns.regplot(x=df["Volume"], y=df["Market Cap"], ax=ax[0])
-    sns.boxplot(x=df["Volume"], y= None, ax=ax[1])
+    sns.regplot(x=df["Market Cap"], y=df["Low"], ax=ax[0])
+    sns.boxplot(x=df["Market Cap"], ax=ax[1])
     fig.savefig(img, format='png')
     img.seek(0)
     plot_url = base64.b64encode(img.getvalue()).decode()
 
+    img1 = io.BytesIO()
+    sns.set(style="darkgrid")
+    fig, ax =  plt.subplots(1, figsize=(11,6))
+    sns.distplot(df['Market Cap'], color="m")
+    fig.savefig(img1, format='png')
+    img1.seek(0)
+    plot_url1 = base64.b64encode(img1.getvalue()).decode()
+
+
+    bar = createBoxPlot(df, 'Date', 'Market Cap', 'bar')
+    scatter = createBoxPlot(df, 'Date', 'Market Cap', 'scatter')
+
     return render_template('cryptoSummary.html', currency=currency,
                            fromDate=fromDate, tillDate=tillDate, df=df,
-                           plot_url=plot_url)
+                           plot_url=plot_url, plot_url1=plot_url1, bar=bar,
+                           scatter=scatter)
 
 
 
 @app.route('/cryptoCharts/')
 @app.route('/cryptoCharts')
 def charts():
-    currency = session['currency']
-    fromDate = session['fromDate']
-    tillDate = session['tillDate']
-
-    if (session['currency'] != None and  session['fromDate'] != None and
-        session['tillDate'] != None):
+    if ('currency' in session and 'fromDate' in session and
+        'tillDate' in session):
+        currency = session['currency']
+        fromDate = session['fromDate']
+        tillDate = session['tillDate']
         df = executeSqlCrypto(varCurrency = '{}'.format(currency),
                               varFromDate = '{}'.format(fromDate),
                               varToDate = '{}'.format(tillDate))
@@ -111,12 +118,11 @@ def charts():
 @app.route("/cryptoTables/")
 @app.route("/cryptoTables")
 def tables():
-    currency = session['currency']
-    fromDate = session['fromDate']
-    tillDate = session['tillDate']
-
-    if (session['currency'] != None and  session['fromDate'] != None and
-        session['tillDate'] != None):
+    if ('currency' in session and 'fromDate' in session and
+        'tillDate' in session):
+        currency = session['currency']
+        fromDate = session['fromDate']
+        tillDate = session['tillDate']
         df = executeSqlCrypto(varCurrency = '{}'.format(currency),
                               varFromDate = '{}'.format(fromDate),
                               varToDate = '{}'.format(tillDate))
@@ -129,3 +135,9 @@ def tables():
                               varToDate = '{}'.format(tillDate))
     return render_template('cryptoTables.html',
                            tables=df.to_html(classes=["table table-bordered table-hover"]))
+
+
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404
