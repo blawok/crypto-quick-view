@@ -1,6 +1,5 @@
 import sqlite3
 from datetime import datetime
-from insertCrypto import insertCrypto
 import pandas as pd
 from coinScraper import coinScraper
 
@@ -38,18 +37,32 @@ def checkIfExists(currency, fromDate, tillDate):
         dfTemp['Currency'] = "{}".format(currency)
 
         # ? inserting df to db
-        dfTemp.to_sql("cryptoStatsTemp", conn, if_exists="replace")
-        pd.read_sql_query("select * from cryptoStatsTemp;", conn)
-        checkQuery = """
-                     insert into cryptoStats
-                     (Date, Open, High, Low, Close, Volume, "Market Cap", Currency)
-                     select cst.*
-                     from cryptoStatsTemp cst
-                     left join cryptoStats cs
-                        on cs.Currency = cst.Currency and cs.Date = cst.Date
-                     where cs.Currency is null;
-                     """
-        c.execute(checkQuery)
-
+        dfTemp.to_sql("cryptoStatsUser", conn, if_exists="append")
+        tempQuery = """
+                    create temp table cryptoStatsTemp as
+                        select
+                            csu.Date,
+                            csu.Open,
+                            csu.High,
+                            csu.Low,
+                            csu.Close,
+                            csu.Volume,
+                            csu."Market Cap",
+                            csu.Currency
+                        from cryptoStatsUser csu
+                        left join cryptoStats cs
+                            on cs.Currency = csu.Currency and cs.Date = csu.Date
+                        where cs.Currency is null;
+                    """
+        c.execute(tempQuery)
+        insertQuery = """
+                      insert into cryptoStats
+                      (Date, Open, High, Low, Close, Volume, "Market Cap", Currency)
+                      select *
+                      from cryptoStatsTemp;
+                      """
+        c.execute(insertQuery)
+        conn.commit()
+        conn.close()
 
 checkIfExists('lisk', '2017-12-25', '2018-01-05')
