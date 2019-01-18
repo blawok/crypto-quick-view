@@ -16,7 +16,7 @@ def insertCrypto(varCurrency = 'lisk', varFromDate = '2018-01-01',
     conn = sqlite3.connect('cryptoDB.db')
     # ? inserting df to db
     df.to_sql("cryptoStats", conn, if_exists="append")
-    pd.read_sql_query("select * from cryptoStats;", conn)
+    # pd.read_sql_query("select * from cryptoStats;", conn)
 
     conn.commit()
     conn.close()

@@ -2,6 +2,7 @@ import sqlite3
 import pandas as pd
 from datetime import datetime
 
+
 def executeSqlCrypto(varCurrency = 'lisk', varFromDate = '2018-01-01',
                      varToDate = '2018-12-31'):
     conn = sqlite3.connect('cryptoDB.db')

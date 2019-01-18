@@ -1,6 +1,9 @@
 import sqlite3
 from datetime import datetime
 from insertCrypto import insertCrypto
+import pandas as pd
+from coinScraper import coinScraper
+
 
 def checkIfExists(currency, fromDate, tillDate):
 
@@ -20,24 +23,33 @@ def checkIfExists(currency, fromDate, tillDate):
     # ? connect to DB
     conn = sqlite3.connect('cryptoDB.db')
 
-    # ? create cursor (tunnel to db)
+    # ? create cursor (tunnel to db) and execute the query
     c = conn.cursor()
-
     c.execute(query)
+
     numberOfDistinctDates = int(c.fetchone()[0])
     numberOfDays = days_between(tillDate, fromDate) + 1
-    print(numberOfDays == numberOfDistinctDates)
+
     if (numberOfDays != numberOfDistinctDates):
-        # insertCrypto(currency, fromDate, tillDate)
+        dfTemp = coinScraper(currency, fromDate, tillDate)
 
-    """
-    df = (select * from DB)
-    dfTemp = df(interval with missing values)
-    query = (select dfTemp.*
-             from DB
-             right join dfTemp
-                on (DB.Currency = dfTemp.Currency and DB.Date = dfTemp.Date)
-             where DB.Currency is null;
-    """
+        # ? casting timestamp column to date
+        dfTemp['Date'] = pd.to_datetime(dfTemp['Date']).apply(lambda x: x.date())
+        dfTemp['Currency'] = "{}".format(currency)
 
-checkIfExists('lisk', '2018-01-01', '2018-01-10')
+        # ? inserting df to db
+        dfTemp.to_sql("cryptoStatsTemp", conn, if_exists="replace")
+        pd.read_sql_query("select * from cryptoStatsTemp;", conn)
+        checkQuery = """
+                     insert into cryptoStats
+                     (Date, Open, High, Low, Close, Volume, "Market Cap", Currency)
+                     select cst.*
+                     from cryptoStatsTemp cst
+                     left join cryptoStats cs
+                        on cs.Currency = cst.Currency and cs.Date = cst.Date
+                     where cs.Currency is null;
+                     """
+        c.execute(checkQuery)
+
+
+checkIfExists('lisk', '2017-12-25', '2018-01-05')
