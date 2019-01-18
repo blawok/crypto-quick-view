@@ -4,7 +4,7 @@ import pandas as pd
 from coinScraper import coinScraper
 
 
-def checkIfExists(currency, fromDate, tillDate):
+def appendIfNotExist(currency, fromDate, tillDate):
 
     def days_between(d1, d2):
         d1 = datetime.strptime(d1, "%Y-%m-%d")
@@ -27,6 +27,7 @@ def checkIfExists(currency, fromDate, tillDate):
     c.execute(query)
 
     numberOfDistinctDates = int(c.fetchone()[0])
+    # ? number of days between dates
     numberOfDays = days_between(tillDate, fromDate) + 1
 
     if (numberOfDays != numberOfDistinctDates):
@@ -65,4 +66,4 @@ def checkIfExists(currency, fromDate, tillDate):
         conn.commit()
         conn.close()
 
-checkIfExists('lisk', '2017-12-25', '2018-01-05')
+# checkIfExists('lisk', '2017-12-25', '2018-01-05')

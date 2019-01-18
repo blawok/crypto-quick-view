@@ -20,7 +20,7 @@ from scraper import cryptoInfoToDf
 from selectCrypto import executeSqlCrypto
 from forms import InfoForm
 from graphCreate import createPlot
-
+from checkDB import appendIfNotExist
 
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/forms', methods=['GET', 'POST'])
@@ -28,6 +28,8 @@ def submit():
     form = InfoForm()
 
     if form.validate_on_submit():
+        appendIfNotExist(form.currency.data, form.fromDate.data, form.tillDate.data)
+
         session['currency'] = form.currency.data
         session['fromDate'] = form.fromDate.data
         session['tillDate'] = form.tillDate.data

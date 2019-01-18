@@ -26,6 +26,7 @@ def executeSqlCrypto(varCurrency = 'lisk', varFromDate = '2018-01-01',
     # for row in c.execute('SELECT * FROM cryptoStats'):
     #     print(row)
 
+    # ? execute query
     # c.execute("SELECT * FROM cryptoStats")
 
     # ? print results of execute

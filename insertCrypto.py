@@ -21,8 +21,7 @@ def insertCrypto(varCurrency = 'lisk', varFromDate = '2018-01-01',
     conn.commit()
     conn.close()
 
-insertCrypto()
-# * CREATE TABLE cryptoStats ("index" INTEGER, createdDate DEFAULT (datetime('now')), Date DATE, "Open*" REAL, High REAL, Low REAL, "Close**" REAL, Volume INTEGER, "Market Cap" INTEGER, "Currency" TEXT);
+# insertCrypto()
 # * CREATE TABLE cryptoStats ("index" INTEGER, createdDate DEFAULT (datetime('now')), Date DATE, Open REAL, High REAL, Low REAL, Close REAL, Volume REAL, "Market Cap" REAL, Currency TEXT);
 
 # list of cryptocurrencies:
