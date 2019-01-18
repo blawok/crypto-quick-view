@@ -16,7 +16,7 @@ def appendIfNotExist(currency, fromDate, tillDate):
             count(distinct Date)
             from cryptoStats
             where Currency = '{0}'
-                and Date between '{1}' and '{2}'
+                and Date between '{1}' and '{2}';
             """.format(currency, fromDate, tillDate)
 
     # ? connect to DB

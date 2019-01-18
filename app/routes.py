@@ -21,6 +21,7 @@ from selectCrypto import executeSqlCrypto
 from forms import InfoForm
 from graphCreate import createPlot
 from checkDB import appendIfNotExist
+from utilsCryptoSQL import getFromDatabase
 
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/forms', methods=['GET', 'POST'])
@@ -59,6 +60,9 @@ def summary():
                               varFromDate = '{}'.format(fromDate),
                               varToDate = '{}'.format(tillDate))
 
+    maxHigh = getFromDatabase(currency,fromDate,tillDate,'max')
+    minLow = getFromDatabase(currency,fromDate,tillDate,'min')
+
     img = io.BytesIO()
     sns.set(style="darkgrid")
     fig, ax =  plt.subplots(1,2, figsize=(11,6))
@@ -76,7 +80,6 @@ def summary():
     img1.seek(0)
     plot_url1 = base64.b64encode(img1.getvalue()).decode()
 
-
     bar = createPlot(df, 'Date', 'Volume', 'bar')
     scatter = createPlot(df, 'Date', 'Market Cap', 'scatter')
     scatter2 = createPlot(df, 'Date', 'Close', 'scatter')
@@ -84,7 +87,8 @@ def summary():
     return render_template('cryptoSummary.html', currency=currency,
                            fromDate=fromDate, tillDate=tillDate, df=df,
                            plot_url=plot_url, plot_url1=plot_url1, bar=bar,
-                           scatter=scatter, scatter2=scatter2)
+                           scatter=scatter, scatter2=scatter2, maxHigh=maxHigh,
+                           minLow=minLow)
 
 
 
