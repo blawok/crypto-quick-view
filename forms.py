@@ -1,9 +1,16 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField
+from wtforms import StringField, SubmitField, DateField, SelectField
 from wtforms.validators import DataRequired
 
 class InfoForm(FlaskForm):
-    currency = StringField('currency', validators=[DataRequired()])
+    currency = SelectField(u'Currency:',
+                           choices = [('lisk', 'LSK'),
+                                      ('bitcoin', 'BTC'),
+                                      ('ripple', 'XRP'),
+                                      ('ethereum', 'ETH'),
+                                      ('litecoin', 'LTC')
+                                      ],
+                           validators=[DataRequired()])
     fromDate = StringField("From when?", validators=[DataRequired()])
     tillDate = StringField("Until when?", validators=[DataRequired()])
     submit = SubmitField('Submit')

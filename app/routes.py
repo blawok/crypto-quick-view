@@ -19,9 +19,9 @@ import sqlite3
 from scraper import cryptoInfoToDf
 from selectCrypto import executeSqlCrypto
 from forms import InfoForm
-from graphCreate import createPlot
+from graphCreate import createPlot, createPlotMultiple
 from checkDB import appendIfNotExist
-from utilsCryptoSQL import getFromDatabase
+from utilsCryptoSQL import getFromDatabase, getGroupedData
 
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/forms', methods=['GET', 'POST'])
@@ -65,30 +65,22 @@ def summary():
 
     img = io.BytesIO()
     sns.set(style="darkgrid")
-    fig, ax =  plt.subplots(1,2, figsize=(11,6))
-    sns.regplot(x=df["Market Cap"], y=df["Low"], ax=ax[0])
-    sns.boxplot(x=df["Market Cap"], ax=ax[1])
+    fig, ax =  plt.subplots(1, figsize=(11,6))
+    sns.distplot(df['Market Cap'], color="m")
     fig.savefig(img, format='png')
     img.seek(0)
     plot_url = base64.b64encode(img.getvalue()).decode()
 
-    img1 = io.BytesIO()
-    sns.set(style="darkgrid")
-    fig, ax =  plt.subplots(1, figsize=(11,6))
-    sns.distplot(df['Market Cap'], color="m")
-    fig.savefig(img1, format='png')
-    img1.seek(0)
-    plot_url1 = base64.b64encode(img1.getvalue()).decode()
-
     bar = createPlot(df, 'Date', 'Volume', 'bar')
     scatter = createPlot(df, 'Date', 'Market Cap', 'scatter')
     scatter2 = createPlot(df, 'Date', 'Close', 'scatter')
+    scatterMulti = createPlotMultiple(df, 'Date', 'Open', 'Close', 'scatter')
 
     return render_template('cryptoSummary.html', currency=currency,
                            fromDate=fromDate, tillDate=tillDate, df=df,
-                           plot_url=plot_url, plot_url1=plot_url1, bar=bar,
-                           scatter=scatter, scatter2=scatter2, maxHigh=maxHigh,
-                           minLow=minLow)
+                           plot_url=plot_url, bar=bar, scatter=scatter,
+                           scatter2=scatter2, maxHigh=maxHigh, minLow=minLow,
+                           scatterMulti=scatterMulti)
 
 
 
@@ -119,7 +111,8 @@ def charts():
                            titleLine='Lisk Daily Price in USD',
                            titleBar='Lisk Daily Volume',
                            df=df, maxLine=50, maxBar=100000000,
-                           labels=labels, valuesBar=valuesBar, valuesLine=valuesLine)
+                           labels=labels, valuesBar=valuesBar,
+                           valuesLine=valuesLine)
 
 
 
@@ -141,8 +134,13 @@ def tables():
         df = executeSqlCrypto(varCurrency = '{}'.format(currency),
                               varFromDate = '{}'.format(fromDate),
                               varToDate = '{}'.format(tillDate))
-    return render_template('cryptoTables.html',
-                           tables=df.to_html(classes=["table table-bordered table-hover"]))
+    activeStatus = 'active'
+    dfGrouped = getGroupedData()
+    dfMonthData = getFromDatabase(currency,fromDate,tillDate,'monthData')
+    return render_template('cryptoTables.html', activeStatus = activeStatus,
+                           tables=df.loc[:, 'Date':].to_html(classes=["table table-bordered table-hover"]),
+                           tableGrouped = dfGrouped.to_html(classes=["table table-bordered table-hover"]),
+                           tableMonth = dfMonthData.to_html(classes=["table table-bordered table-hover"]))
 
 
 

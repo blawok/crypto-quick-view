@@ -46,24 +46,25 @@
                 </div>
                 <!-- /.row -->
 
-<div class="col-lg-6">
-<h2> Fill the form </h2>
-<p>
-Please choose something
-</p>
-
-<form method="POST">
-    {{ form.csrf_token }}
-    {{ form.currency.label }} {{ form.currency(class="form-control", value='lisk') }}
-    <br>
-    {{ form.fromDate.label }} {{ form.fromDate(class="form-control", value='2018-01-01') }}
-    <br>
-    {{ form.tillDate.label }} {{ form.tillDate(class="form-control", value='2018-01-31') }}
-    <br>
-    <input type="submit" value="Go">
-</form>
+<div class="row">
+    <div class="col-lg-4"></div>
+    <div class="col-lg-4">
+        <div class="alert alert-info" role="alert">
+        <h2> Fill the form </h2>
+        <p> Please choose something </p>
+        </div>
+    <form method="POST">
+        {{ form.csrf_token }}
+        {{ form.currency.label }} {{ form.currency(class="form-control") }}
+        <br>
+        {{ form.fromDate.label }} {{ form.fromDate(class="form-control", value='2018-01-01') }}
+        <br>
+        {{ form.tillDate.label }} {{ form.tillDate(class="form-control", value='2018-01-31') }}
+        <br>
+        <input type="submit" value="Go" class="btn btn-danger">
+    </form>
+    </div>
 </div>
-
 
 
 {% endblock %}

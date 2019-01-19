@@ -44,7 +44,6 @@
                 </div>
                 <!-- /.row -->
 
-
 <div class="col-lg-4 col-md-6">
                         <div class="panel panel-info">
                             <div class="panel-heading">
@@ -53,8 +52,8 @@
                                         <i class="fa fa-money fa-5x"></i>
                                     </div>
                                     <div class="col-xs-9 text-center">
-                                        <div class="huge">{{ session['currency'] }}</div>
-                                        <div>From {{ session['fromDate'] }} to {{ session['tillDate'] }}</div>
+                                                <div class="huge">{{ currency }}</div>
+                                                <div>From {{ fromDate }} to {{ tillDate }}</div>
                                     </div>
                                 </div>
                             </div>
@@ -77,8 +76,8 @@
                                     <div class="col-xs-3">
                                         <i class="fa fa-bomb fa-5x"></i>
                                     </div>
-                                    <div class="col-xs-9 text-right">
-                                        <div class="huge">{{ maxHigh }}</div>
+                                    <div class="col-xs-9 text-center">
+                                        <div class="huge">${{ maxHigh }}</div>
                                         <div>Max value!</div>
                                     </div>
                                 </div>
@@ -99,8 +98,8 @@
                                     <div class="col-xs-3">
                                         <i class="fa fa-cloud fa-5x"></i>
                                     </div>
-                                    <div class="col-xs-9 text-right">
-                                        <div class="huge">{{ minLow }}</div>
+                                    <div class="col-xs-9 text-center">
+                                        <div class="huge">${{ minLow }}</div>
                                         <div>Min value</div>
                                     </div>
                                 </div>
@@ -117,13 +116,10 @@
                 </div>
 
 
-
-
-
-<div class="chart" id="scattergraph2">
+<div class="chart" id="scattergraph3">
     <script>
-        var graphs = {{scatter2 | safe}};
-        Plotly.plot('scattergraph2',graphs,{});
+        var graphs = {{scatterMulti | safe}};
+        Plotly.plot('scattergraph3',graphs,{});
     </script>
 </div>
 
@@ -141,13 +137,8 @@
     </script>
 </div>
 
-
- <div>
+ <div align="center">
     <img src="data:image/png;base64, {{ plot_url }}" >
- </div>
-
- <div>
-    <img src="data:image/png;base64, {{ plot_url1 }}" >
  </div>
 
 
