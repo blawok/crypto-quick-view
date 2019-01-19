@@ -208,3 +208,32 @@ def getGroupedData():
     c.execute(dfGroupedQuery)
     dfGrouped = pd.read_sql_query(dfGroupedQuery, conn)
     return dfGrouped
+
+
+
+def getCurrencyNames(currency='lisk'):
+    """
+    variables:
+        currency - string containing currency name
+    returns:
+        execute query
+        returns dataframe created by query
+    """
+    # ? connect to DB
+    conn = sqlite3.connect('cryptoDB.db')
+
+    # ? create cursor (tunnel to db) and execute the query
+    c = conn.cursor()
+
+    dfNamesQuery = """
+                     select
+                     distinct cd.CurrencyShort
+                     from cryptoDict cd
+                     join cryptoStats cs
+                        on cd.Currency = cs.Currency
+                     where cs.Currency = '{}';
+                     """.format(currency)
+
+    c.execute(dfNamesQuery)
+    shortcut = str(c.fetchone()[0])
+    return shortcut

@@ -17,7 +17,7 @@ import json
 import sqlite3
 
 from utilsSQL import (executeSqlCrypto, appendIfNotExist, getFromDatabase,
-                      getGroupedData)
+                      getGroupedData, getCurrencyNames)
 from coinScraper import coinScraper
 from forms import InfoForm
 from graphCreate import createPlot, createPlotMultiple
@@ -25,6 +25,7 @@ from graphCreate import createPlot, createPlotMultiple
 
 
 @app.route('/', methods=['GET', 'POST'])
+@app.route('/forms/', methods=['GET', 'POST'])
 @app.route('/forms', methods=['GET', 'POST'])
 def submit():
     form = InfoForm()
@@ -63,6 +64,7 @@ def summary():
 
     maxHigh = getFromDatabase(currency,fromDate,tillDate,'max')
     minLow = getFromDatabase(currency,fromDate,tillDate,'min')
+    shortcut = getCurrencyNames(currency)
 
     img = io.BytesIO()
     sns.set(style="darkgrid")
@@ -81,7 +83,7 @@ def summary():
                            fromDate=fromDate, tillDate=tillDate, df=df,
                            plot_url=plot_url, bar=bar, scatter=scatter,
                            scatter2=scatter2, maxHigh=maxHigh, minLow=minLow,
-                           scatterMulti=scatterMulti)
+                           scatterMulti=scatterMulti, shortcut=shortcut)
 
 
 
