@@ -3,7 +3,16 @@ import plotly.graph_objs as go
 import json
 
 def createPlot(df, x, y, plotType):
+    """
+    variables:
+    df - dataframe from which the function creates the plot
+    x - xaxis variable
+    y - yaxis variable
+    plotType - defines the plot type
 
+    returns:
+    plot depending on chosen plotType
+    """
     if plotType == 'bar':
         data = [
             go.Bar(
@@ -40,7 +49,17 @@ def createPlot(df, x, y, plotType):
 
 
 def createPlotMultiple(df, x, y, y2, plotType):
+    """
+    variables:
+    df - dataframe from which the function creates the plot
+    x - xaxis variable
+    y - first yaxis variable
+    y2 - second yaxis variable
+    plotType - defines the plot type
 
+    returns:
+    plot with multiple variables on yaxis, depending on chosen plotType
+    """
     if plotType == 'scatter':
         plot1 = go.Scatter(
                 name = '{}'.format(y),

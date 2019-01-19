@@ -8,7 +8,17 @@ from coinScraper import coinScraper
 
 
 def appendIfNotExist(currency, fromDate, tillDate):
+    """
+    variables:
+        currency - string value of currency name
+        fromDate - date in format of YYYY-MM-DD
+        tillDate - date in format of YYYY-MM-DD
 
+    returns:
+        check if certain values are in database
+        scrape and insert values that are not yet in database
+        does not return anything
+    """
     def days_between(d1, d2):
         d1 = datetime.strptime(d1, "%Y-%m-%d")
         d2 = datetime.strptime(d2, "%Y-%m-%d")
@@ -73,6 +83,17 @@ def appendIfNotExist(currency, fromDate, tillDate):
 
 def executeSqlCrypto(varCurrency = 'lisk', varFromDate = '2018-01-01',
                      varToDate = '2018-12-31'):
+    """
+    variables:
+        varCurrency - string value of currency name
+        varFromDate - date in format of YYYY-MM-DD
+        varToDate - date in format of YYYY-MM-DD
+
+    returns:
+        execute query that selects all values from database
+        for given interval and cryptocurrency
+        returns dataframe created by query
+    """
     conn = sqlite3.connect('cryptoDB.db')
 
     # ? create cursor (tunnel to db)
@@ -96,7 +117,18 @@ def executeSqlCrypto(varCurrency = 'lisk', varFromDate = '2018-01-01',
 
 
 def getFromDatabase(currency, fromDate, tillDate, outputType):
+    """
+    variables:
+        currency - string value of currency name
+        fromDate - date in format of YYYY-MM-DD
+        tillDate - date in format of YYYY-MM-DD
+        outputType - string that indicates which query to use
 
+    returns:
+        execute query that selects values from database
+        based on chosen outputType
+        returns dataframe created by query or integer
+    """
     # ? connect to DB
     conn = sqlite3.connect('cryptoDB.db')
 
@@ -151,7 +183,12 @@ def getFromDatabase(currency, fromDate, tillDate, outputType):
 
 
 def getGroupedData():
-
+    """
+    returns:
+        execute query that selects values from database
+        grouped by currency
+        returns dataframe created by query
+    """
     # ? connect to DB
     conn = sqlite3.connect('cryptoDB.db')
 
