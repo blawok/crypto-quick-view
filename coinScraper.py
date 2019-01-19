@@ -14,5 +14,3 @@ def coinScraper(varCurrency = 'lisk', varFromDate = '2018-01-01',
     df.columns = ['Date', 'Open', 'High', 'Low', 'Close', 'Volume', 'Market Cap']
 
     return df
-
-# print(coinScraper())

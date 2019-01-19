@@ -5,16 +5,13 @@
  <!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
             <div class="collapse navbar-collapse navbar-ex1-collapse">
                 <ul class="nav navbar-nav side-nav">
-                    <li class=''>
+                    <li >
                         <a href="/forms"><i class="fa fa-fw fa-cog"></i> Form</a>
                     </li>
-                    <li class=''>
-                        <a href="/cryptoSummary"><i class="fa fa-fw fa-dashboard"></i> Dashboard</a>
+                    <li >
+                        <a href="/cryptoSummary"><i class="fa fa-fw fa-bar-chart-o"></i> Dashboard</a>
                     </li>
-                    <li class=''>
-                        <a href="/cryptoCharts"><i class="fa fa-fw fa-bar-chart-o"></i> Charts</a>
-                    </li>
-                    <li  class="{{activeStatus}}">
+                    <li  class="active">
                         <a href="/cryptoTables"><i class="fa fa-fw fa-table"></i> Tables</a>
                     </li>
                 </ul>
@@ -74,11 +71,16 @@
                     </div>
                 </div>
 
-<div class="alert alert-warning" role="alert">
-<h2 align='center'>Chosen currency full data from interval</h2>
+<div class="row">
+    <div class="col-lg-12 text-center">
+     <div class="panel panel-default">
+        <div class="alert alert-warning" role="alert">
+        <h2 align='center'>Chosen currency full data from interval</h2>
+        </div>
+        <div class='table-responsive'>
+            {{ tables | safe }}
+        </div>
+    </div>
 </div>
-<div class='table-responsive'>
-    {{ tables | safe }}
 </div>
-
 {% endblock %}

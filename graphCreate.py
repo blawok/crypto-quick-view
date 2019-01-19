@@ -10,9 +10,7 @@ def createPlot(df, x, y, plotType):
                 name = '{}'.format(y),
                 x=df['{}'.format(x)],
                 y=df['{}'.format(y)],
-                marker = dict(
-                              color = '#a090b5'
-                         )
+                marker = dict(color = '#a090b5')
             )]
         layout = dict(title = '{}'.format(y), yaxis=dict(
         title='{}'.format(y),
@@ -26,9 +24,7 @@ def createPlot(df, x, y, plotType):
                 x=df['{}'.format(x)],
                 y=df['{}'.format(y)],
                 mode = 'lines+markers',
-                marker = dict(
-                              color = '#ff4444'
-                         ),
+                marker = dict(color = '#ff4444'),
 
     )]
         layout = dict(title = '{}'.format(y), yaxis=dict(

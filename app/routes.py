@@ -16,12 +16,13 @@ import plotly.graph_objs as go
 import json
 import sqlite3
 
-from scraper import cryptoInfoToDf
-from selectCrypto import executeSqlCrypto
+from utilsSQL import (executeSqlCrypto, appendIfNotExist, getFromDatabase,
+                      getGroupedData)
+from coinScraper import coinScraper
 from forms import InfoForm
 from graphCreate import createPlot, createPlotMultiple
-from checkDB import appendIfNotExist
-from utilsCryptoSQL import getFromDatabase, getGroupedData
+
+
 
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/forms', methods=['GET', 'POST'])
@@ -84,38 +85,6 @@ def summary():
 
 
 
-@app.route('/cryptoCharts/')
-@app.route('/cryptoCharts')
-def charts():
-    if ('currency' in session and 'fromDate' in session and
-        'tillDate' in session):
-        currency = session['currency']
-        fromDate = session['fromDate']
-        tillDate = session['tillDate']
-        df = executeSqlCrypto(varCurrency = '{}'.format(currency),
-                              varFromDate = '{}'.format(fromDate),
-                              varToDate = '{}'.format(tillDate))
-    else:
-        currency = 'lisk'
-        fromDate = '2018-07-15'
-        tillDate = '2018-07-20'
-        df = executeSqlCrypto(varCurrency = '{}'.format(currency),
-                              varFromDate = '{}'.format(fromDate),
-                              varToDate = '{}'.format(tillDate))
-
-    labels =  list(df["Date"])
-    valuesLine = list(df["High"])
-    valuesBar = list(df["Volume"])
-
-    return render_template('cryptoCharts.html',
-                           titleLine='Lisk Daily Price in USD',
-                           titleBar='Lisk Daily Volume',
-                           df=df, maxLine=50, maxBar=100000000,
-                           labels=labels, valuesBar=valuesBar,
-                           valuesLine=valuesLine)
-
-
-
 @app.route("/cryptoTables/")
 @app.route("/cryptoTables")
 def tables():
@@ -134,10 +103,10 @@ def tables():
         df = executeSqlCrypto(varCurrency = '{}'.format(currency),
                               varFromDate = '{}'.format(fromDate),
                               varToDate = '{}'.format(tillDate))
-    activeStatus = 'active'
+
     dfGrouped = getGroupedData()
     dfMonthData = getFromDatabase(currency,fromDate,tillDate,'monthData')
-    return render_template('cryptoTables.html', activeStatus = activeStatus,
+    return render_template('cryptoTables.html',
                            tables=df.loc[:, 'Date':].to_html(classes=["table table-bordered table-hover"]),
                            tableGrouped = dfGrouped.to_html(classes=["table table-bordered table-hover"]),
                            tableMonth = dfMonthData.to_html(classes=["table table-bordered table-hover"]))
