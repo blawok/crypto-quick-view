@@ -17,7 +17,14 @@ class InfoForm(FlaskForm):
                            validators=[DataRequired()])
     fromDate = StringField("From when?", validators=[DataRequired()])
     tillDate = StringField("Until when?", validators=[DataRequired()])
+    submit = SubmitField('Submit')
 
+
+class UpdateForm(FlaskForm):
+    """
+    class that inherits from FlaskForm
+    used for getting values from user to update cryptoStats
+    """
     currencyUpdate = SelectField(u'Currency:',
                            choices = [('lisk', 'LSK'),
                                       ('bitcoin', 'BTC'),

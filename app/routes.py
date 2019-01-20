@@ -19,7 +19,7 @@ import sqlite3
 from utilsSQL import (executeSqlCrypto, appendIfNotExist, getFromDatabase,
                       getGroupedData, getCurrencyNames, updateDataBase)
 from coinScraper import coinScraper
-from forms import InfoForm
+from forms import InfoForm, UpdateForm
 from graphCreate import createPlot, createPlotMultiple
 
 
@@ -118,11 +118,16 @@ def tables():
 @app.route('/updateDB/', methods=['GET', 'POST'])
 @app.route('/updateDB', methods=['GET', 'POST'])
 def submitUpdate():
-    form = InfoForm()
-    updateDataBase(form.currencyUpdate.data,
-                   form.dateUpdate.data,
-                   form.highUpdate.data,
-                   form.lowUpdate.data)
+    form = UpdateForm()
+
+    if form.validate_on_submit():
+
+        updateDataBase(currency = '{}'.format(form.currencyUpdate.data),
+                        dataUpdate = '{}'.format(form.dateUpdate.data),
+                        highRate = form.highUpdate.data,
+                        lowRate = form.lowUpdate.data)
+
+        return redirect(url_for('tables'))
 
     return render_template('updateDB.html', form=form)
 
