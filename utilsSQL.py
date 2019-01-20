@@ -115,7 +115,6 @@ def executeSqlCrypto(varCurrency = 'lisk', varFromDate = '2018-01-01',
     return df
 
 
-
 def getFromDatabase(currency, fromDate, tillDate, outputType):
     """
     variables:
@@ -127,7 +126,7 @@ def getFromDatabase(currency, fromDate, tillDate, outputType):
     returns:
         execute query that selects values from database
         based on chosen outputType
-        returns dataframe created by query or integer
+        returns dataframe created by query or an integer
     """
     # ? connect to DB
     conn = sqlite3.connect('cryptoDB.db')
