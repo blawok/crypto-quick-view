@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, DateField, SelectField
+from wtforms import StringField, SubmitField, DateField, SelectField, IntegerField
 from wtforms.validators import DataRequired
 
 class InfoForm(FlaskForm):
@@ -17,4 +17,17 @@ class InfoForm(FlaskForm):
                            validators=[DataRequired()])
     fromDate = StringField("From when?", validators=[DataRequired()])
     tillDate = StringField("Until when?", validators=[DataRequired()])
+
+    currencyUpdate = SelectField(u'Currency:',
+                           choices = [('lisk', 'LSK'),
+                                      ('bitcoin', 'BTC'),
+                                      ('ripple', 'XRP'),
+                                      ('ethereum', 'ETH'),
+                                      ('litecoin', 'LTC')
+                                      ],
+                           validators=[DataRequired()])
+    dateUpdate = StringField("Choose date to update", validators=[DataRequired()])
+    highUpdate = IntegerField("Change high value", validators=[DataRequired()])
+    lowUpdate = IntegerField("Change low value", validators=[DataRequired()])
+
     submit = SubmitField('Submit')

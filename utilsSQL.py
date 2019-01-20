@@ -147,6 +147,7 @@ def getFromDatabase(currency, fromDate, tillDate, outputType):
 
         c.execute(queryMax)
         maxHigh = float(c.fetchone()[0])
+        conn.close()
         return maxHigh
 
     elif outputType == 'min':
@@ -161,6 +162,7 @@ def getFromDatabase(currency, fromDate, tillDate, outputType):
 
         c.execute(queryMin)
         minLow = float(c.fetchone()[0])
+        conn.close()
         return minLow
 
     elif outputType == 'monthData':
@@ -177,6 +179,7 @@ def getFromDatabase(currency, fromDate, tillDate, outputType):
                      """.format(currency)
         c.execute(monthQuery)
         dfMonthData = pd.read_sql_query(monthQuery, conn)
+        conn.close()
         return dfMonthData
 
 
@@ -206,6 +209,7 @@ def getGroupedData():
                      """
     c.execute(dfGroupedQuery)
     dfGrouped = pd.read_sql_query(dfGroupedQuery, conn)
+    conn.close()
     return dfGrouped
 
 
@@ -235,4 +239,34 @@ def getCurrencyNames(currency='lisk'):
 
     c.execute(dfNamesQuery)
     shortcut = str(c.fetchone()[0])
+    conn.close()
     return shortcut
+
+
+
+def updateDataBase(currency='lisk', dataUpdate = '2018-01-01', highRate=0, lowRate=0):
+    """
+    variables:
+        currency - string containing currency name
+        dataUpdate - date to identify row to update
+        highRate - value of High rate to update
+        lowRate - value of Low rate to update
+    returns:
+        execute query
+        updates DB (one row of cryptoStats)
+    """
+    # ? connect to DB
+    conn = sqlite3.connect('cryptoDB.db')
+
+    # ? create cursor (tunnel to db) and execute the query
+    c = conn.cursor()
+
+    updateQuery = """
+                  UPDATE cryptoStats SET High = {}, Low = {}
+                  where Currency = '{}'
+                    and Date = '{}';
+                  """.format(highRate, lowRate, currency, dataUpdate)
+
+    c.execute(updateQuery)
+    conn.commit()
+    conn.close()

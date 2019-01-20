@@ -17,7 +17,7 @@ import json
 import sqlite3
 
 from utilsSQL import (executeSqlCrypto, appendIfNotExist, getFromDatabase,
-                      getGroupedData, getCurrencyNames)
+                      getGroupedData, getCurrencyNames, updateDataBase)
 from coinScraper import coinScraper
 from forms import InfoForm
 from graphCreate import createPlot, createPlotMultiple
@@ -113,6 +113,18 @@ def tables():
                            tableGrouped = dfGrouped.to_html(classes=["table table-bordered table-hover"]),
                            tableMonth = dfMonthData.to_html(classes=["table table-bordered table-hover"]))
 
+
+
+@app.route('/updateDB/', methods=['GET', 'POST'])
+@app.route('/updateDB', methods=['GET', 'POST'])
+def submitUpdate():
+    form = InfoForm()
+    updateDataBase(form.currencyUpdate.data,
+                   form.dateUpdate.data,
+                   form.highUpdate.data,
+                   form.lowUpdate.data)
+
+    return render_template('updateDB.html', form=form)
 
 
 @app.errorhandler(404)
