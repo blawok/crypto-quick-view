@@ -75,6 +75,9 @@ Each function that is used in the app (except of the ones in _routes.py_) has it
 
 ![docstring](https://user-images.githubusercontent.com/41793223/51441083-2e787e00-1cce-11e9-8771-8c621e846bab.PNG)
 
+## Bootstrap
+
+Project's frontend is based on a template https://startbootstrap.com/template-overviews/sb-admin/
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
