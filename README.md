@@ -60,7 +60,7 @@ If you click on the _Update_ object on the left you should see:
 
 ![updateform](https://user-images.githubusercontent.com/41793223/51444196-02bcbe80-1cf5-11e9-97da-f69d50a9d3aa.PNG)
 
-
+If your imagination goes beyond normal human being one then you can update any row you want in the _cryptoStats_ table :)
 ## Database overview
 
 Sqlite3 database is being used in this project and structure of this database is quite straightforward.
