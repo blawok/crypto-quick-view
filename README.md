@@ -12,14 +12,12 @@ The whole logic of this app is that you select (or use default values) a cryptoc
 Clone repository (https://github.com/blawok/cryptoQuickView.git) to your desire directory (mine is GIT/) and then
 
 ```bash
+cd GIT/cryptoQuickView
 pip install -r requirements
 ```
 
 ## Usage
 
-```bash
-cd GIT/cryptoQuickView
-```
 ```bash
 flask run
 ```
