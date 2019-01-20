@@ -18,6 +18,8 @@ pip install -r requirements
 
 ## Usage
 
+__Requires internet connection to display Plotly charts and download new data.__
+
 ```bash
 flask run
 ```
