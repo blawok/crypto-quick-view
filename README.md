@@ -64,7 +64,7 @@ The main table that the whole app depends on is _cryptoStats_. Data in that tabl
 
 ## Functions overview
 
-Each function that is used in the app has its own docstring, like the one below:
+Each function that is used in the app (except of the ones in _routes.py_) has its own docstring, like the one below:
 
 ![docstring](https://user-images.githubusercontent.com/41793223/51441083-2e787e00-1cce-11e9-8771-8c621e846bab.PNG)
 
