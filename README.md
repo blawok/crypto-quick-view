@@ -9,7 +9,7 @@ The whole logic of this app is that you select (or use default values) a cryptoc
 
 ## Installation
 
-Clone repository (https://github.com/blawok/cryptoQuickView.git) to your desire directory (mine is GIT/) and then
+Clone repository (https://github.com/blawok/cryptoQuickView.git) to your desired directory (mine is GIT/) and then
 
 ```bash
 cd GIT/cryptoQuickView
@@ -39,7 +39,7 @@ Next page should look something like this:\
 
 ![summary](https://user-images.githubusercontent.com/41793223/51430799-6c1ecd80-1c20-11e9-80b1-e8edda7ce578.jpg)
 
-On the panels in the head of the page you can see choosen cryptocurrency, maximum an minimum of currency rate from chosen period.
+On the panels in the head of the page you can see choosen cryptocurrency, maximum and minimum of currency rate from chosen period.
 First graph is a Plotly (so you can play with it) graph showing open and close rates for given period. Second graph shows volume values and the third one market capitalization of a currency.
 The last one shows distribution of market capitalization for a given period.
 
