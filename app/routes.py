@@ -7,8 +7,6 @@ from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired
 
 import pandas as pd
-import seaborn as sns
-import matplotlib.pyplot as plt
 import io
 import base64
 import plotly
@@ -17,7 +15,8 @@ import json
 import sqlite3
 
 from utilsSQL import (executeSqlCrypto, appendIfNotExist, getFromDatabase,
-                      getGroupedData, getCurrencyNames, updateDataBase)
+                      getGroupedData, getCurrencyNames, updateDataBase,
+                      getCurrencyNames2)
 from coinScraper import coinScraper
 from forms import InfoForm, UpdateForm
 from graphCreate import createPlot, createPlotMultiple
@@ -64,15 +63,15 @@ def summary():
 
     maxHigh = getFromDatabase(currency,fromDate,tillDate,'max')
     minLow = getFromDatabase(currency,fromDate,tillDate,'min')
-    shortcut = getCurrencyNames(currency)
+    shortcut = getCurrencyNames2(currency)
 
-    img = io.BytesIO()
-    sns.set(style="darkgrid")
-    fig, ax =  plt.subplots(1, figsize=(11,6))
-    sns.distplot(df['Market Cap'], color="m")
-    fig.savefig(img, format='png')
-    img.seek(0)
-    plot_url = base64.b64encode(img.getvalue()).decode()
+    # img = io.BytesIO()
+    # sns.set(style="darkgrid")
+    # fig, ax =  plt.subplots(1, figsize=(11,6))
+    # sns.distplot(df['Market Cap'], color="m")
+    # fig.savefig(img, format='png')
+    # img.seek(0)
+    # plot_url = base64.b64encode(img.getvalue()).decode()
 
     bar = createPlot(df, 'Date', 'Volume', 'bar')
     scatter = createPlot(df, 'Date', 'Market Cap', 'scatter')
@@ -81,7 +80,8 @@ def summary():
 
     return render_template('cryptoSummary.html', currency=currency,
                            fromDate=fromDate, tillDate=tillDate, df=df,
-                           plot_url=plot_url, bar=bar, scatter=scatter,
+                        #    plot_url=plot_url,
+                            bar=bar, scatter=scatter,
                            scatter2=scatter2, maxHigh=maxHigh, minLow=minLow,
                            scatterMulti=scatterMulti, shortcut=shortcut)
 

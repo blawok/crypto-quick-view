@@ -4,7 +4,7 @@ import pandas as pd
 from datetime import datetime
 from sqlalchemy.types import DateTime
 from coinScraper import coinScraper
-
+from scraper import cryptoInfoToDf
 
 
 def appendIfNotExist(currency, fromDate, tillDate):
@@ -44,11 +44,17 @@ def appendIfNotExist(currency, fromDate, tillDate):
     numberOfDays = days_between(tillDate, fromDate) + 1
 
     if (numberOfDays != numberOfDistinctDates):
-        dfTemp = coinScraper(currency, fromDate, tillDate)
+        # dfTemp = coinScraper(currency, fromDate, tillDate)
+        # fromDate = datetime.strptime(fromDate, '%Y-%m-%d').strftime('%d-%m-%Y')
+        # fromDate = datetime.strptime(tillDate, '%Y-%m-%d').strftime('%d-%m-%Y')
+        dfTemp = cryptoInfoToDf(currency,
+                                datetime.strptime(fromDate, '%Y-%m-%d').strftime('%d-%m-%Y'),
+                                datetime.strptime(tillDate, '%Y-%m-%d').strftime('%d-%m-%Y'))
 
         # ? casting timestamp column to date
         dfTemp['Date'] = pd.to_datetime(dfTemp['Date']).apply(lambda x: x.date())
-        dfTemp['Currency'] = "{}".format(currency)
+        currencyName = getCurrencyNames2(currency)
+        dfTemp['Currency'] = "{}".format(currencyName)
 
         # ? inserting df to db
         dfTemp.to_sql("cryptoStatsUser", conn, if_exists="append")
@@ -137,7 +143,7 @@ def getFromDatabase(currency, fromDate, tillDate, outputType):
     if outputType == 'max':
         queryMax = """
                 select
-                max(High)
+                round(max(High),2)
                 from cryptoStats
                 where Currency = '{0}'
                     and Date between '{1}' and '{2}'
@@ -153,7 +159,7 @@ def getFromDatabase(currency, fromDate, tillDate, outputType):
     elif outputType == 'min':
         queryMin = """
                 select
-                min(Low)
+                round(min(Low),2)
                 from cryptoStats
                 where Currency = '{0}'
                     and Date between '{1}' and '{2}'
@@ -171,8 +177,8 @@ def getFromDatabase(currency, fromDate, tillDate, outputType):
                     Currency,
                     strftime('%m', Date) as Month,
                     strftime('%Y', Date) as Year,
-                    max(Close) maxClose,
-                    min(Close) minClose
+                    round(max(Close),2) maxClose,
+                    round(min(Close),2) minClose
                     from cryptoStats
                     where Currency = '{}'
                     group by Year, Month;
@@ -200,8 +206,8 @@ def getGroupedData():
     dfGroupedQuery = """
                      select
                      Currency,
-                     max(Close) maxClose,
-                     min(Close) minClose,
+                     round(max(Close),2) maxClose,
+                     round(min(Close),2) minClose,
                      min(Date) minDate,
                      max(Date) maxDate
                      from cryptoStats
@@ -242,7 +248,31 @@ def getCurrencyNames(currency='lisk'):
     conn.close()
     return shortcut
 
+def getCurrencyNames2(currency='LSK'):
+    """
+    variables:
+        currency - string containing currency name
+    returns:
+        execute query
+        returns dataframe created by query
+    """
+    # ? connect to DB
+    conn = sqlite3.connect('cryptoDB.db')
 
+    # ? create cursor (tunnel to db) and execute the query
+    c = conn.cursor()
+
+    dfNamesQuery = """
+                     select
+                     cd.Currency
+                     from cryptoDict cd
+                     where cd.CurrencyShort = '{}';
+                     """.format(currency)
+
+    c.execute(dfNamesQuery)
+    fullName = str(c.fetchone()[0])
+    conn.close()
+    return fullName
 
 def updateDataBase(currency='lisk', dataUpdate = '2018-01-01', highRate=0, lowRate=0):
     """
