@@ -3,7 +3,6 @@ import pandas as pd
 
 from datetime import datetime
 from sqlalchemy.types import DateTime
-from coinScraper import coinScraper
 from jsonScraper import cryptoInfoToDf
 
 
@@ -44,8 +43,8 @@ def appendIfNotExist(currency, fromDate, tillDate):
     numberOfDays = days_between(tillDate, fromDate) + 1
 
     if (numberOfDays != numberOfDistinctDates):
-        # dfTemp = coinScraper(currency, fromDate, tillDate)
         dfTemp = cryptoInfoToDf(currency, fromDate, tillDate)
+
         # ? casting timestamp column to date
         dfTemp['Date'] = pd.to_datetime(dfTemp['Date']).apply(lambda x: x.date())
         dfTemp['Currency'] = "{}".format(currency)

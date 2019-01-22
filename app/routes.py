@@ -7,8 +7,6 @@ from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired
 
 import pandas as pd
-import seaborn as sns
-import matplotlib.pyplot as plt
 import io
 import base64
 import plotly
@@ -18,7 +16,6 @@ import sqlite3
 
 from utilsSQL import (executeSqlCrypto, appendIfNotExist, getFromDatabase,
                       getGroupedData, getCurrencyNames, updateDataBase)
-from coinScraper import coinScraper
 from jsonScraper import cryptoInfoToDf
 from forms import InfoForm, UpdateForm
 from graphCreate import createPlot, createPlotMultiple
