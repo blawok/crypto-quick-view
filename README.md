@@ -9,7 +9,7 @@ The whole logic of this app is that you select (or use default values of) a cryp
 
 ## Installation
 
-Clone repository (https://github.com/blawok/cryptoQuickView.git) to your desired directory (mine is GIT/) and then \
+Clone repository (https://github.com/blawok/cryptoQuickView.git) to your desired directory (mine is GIT/) and then 
 
 For Python 3.6 or newer:
 ```bash
@@ -31,7 +31,7 @@ You should see this now in your browser:
 ![formsc](https://user-images.githubusercontent.com/41793223/51444189-cbe6a880-1cf4-11e9-859c-18fa3482a48e.PNG)
 
 Now choose desired cryptocurrency from the list and type desired dates in YYYY-MM-DD format and click "Go".\
-Remember to check if date exists and that you can only choose dates from 2017 till one day before today. \
+Remember to check if date exists and that you can only choose dates since the begining of 2017 till one day before today. \
 There are some default values if you don't know what to choose :) \
 App will check if that data exists in database and download and insert new data otherwise.
 
@@ -81,10 +81,12 @@ Each function that is used in the app (except of the ones in _routes.py_) has it
 ## TODO
 
 - [x] Add update functionality
+- [ ] Reconstruct appending to database functionality (get rid of unnecessary tables)
 - [ ] Chart choose by user
 - [ ] Forms in each template
 - [ ] Add other cryptocurrencies
 - [ ] Add time series analysis
+- [ ] Add description of app's logic (whole process more technically)
 
 
 ## Contributing
