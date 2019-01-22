@@ -5,12 +5,13 @@
 
 # cryptoQuickView
 Python (Flask) university project of creating cryptocurrency dashboard web app.\
-The whole logic of this app is that you select (or use default values) a cryptocurrency and period of time, and it will show you a dashboard and some tables of that cryptocurrency.
+The whole logic of this app is that you select (or use default values of) a cryptocurrency and period of time, and it will show you a dashboard and some tables of that cryptocurrency.
 
 ## Installation
 
-Clone repository (https://github.com/blawok/cryptoQuickView.git) to your desired directory (mine is GIT/) and then
+Clone repository (https://github.com/blawok/cryptoQuickView.git) to your desired directory (mine is GIT/) and then \
 
+For Python 3.6 or newer:
 ```bash
 cd GIT/cryptoQuickView
 pip install -r requirements
@@ -23,14 +24,16 @@ __Requires internet connection to display Plotly charts and download new data.__
 ```bash
 flask run
 ```
-open http://127.0.0.1:5000/.
+open http://127.0.0.1:5000/ (not in IE - some frontend functionality won't work) 
 
 You should see this now in your browser:
 
 ![formsc](https://user-images.githubusercontent.com/41793223/51444189-cbe6a880-1cf4-11e9-859c-18fa3482a48e.PNG)
 
 Now choose desired cryptocurrency from the list and type desired dates in YYYY-MM-DD format and click "Go".\
-There are some default values if you don't know what to choose :)
+Remember to check if date exists and that you can only choose dates from 2017 till one day before today. \
+There are some default values if you don't know what to choose :) \
+App will check if that data exists in database and download and insert new data otherwise.
 
 ## Summary page
 
@@ -41,7 +44,6 @@ Next page should look something like this:\
 
 On the panels in the head of the page you can see choosen cryptocurrency, maximum and minimum of currency rate from chosen period.
 First graph is a Plotly (so you can play with it) graph showing open and close rates for given period. Second graph shows volume values and the third one market capitalization of a currency.
-The last one shows distribution of market capitalization for a given period.
 
 ## Tables page
 
@@ -61,6 +63,7 @@ If you click on the _Update_ object on the left you should see:
 ![updateform](https://user-images.githubusercontent.com/41793223/51444196-02bcbe80-1cf5-11e9-97da-f69d50a9d3aa.PNG)
 
 If your imagination goes beyond normal human being one then you can update any row you want in the _cryptoStats_ table :)
+
 ## Database overview
 
 Sqlite3 database is being used in this project and structure of this database is quite straightforward.
@@ -74,6 +77,14 @@ The main table that the whole app depends on is _cryptoStats_. Data in that tabl
 Each function that is used in the app (except of the ones in _routes.py_) has its own docstring, like the one below:
 
 ![docstring](https://user-images.githubusercontent.com/41793223/51441083-2e787e00-1cce-11e9-8771-8c621e846bab.PNG)
+
+## TODO
+
+- [x] Add update functionality
+- [ ] Chart choose by user
+- [ ] Forms in each template
+- [ ] Add other cryptocurrencies
+- [ ] Add time series analysis
 
 
 ## Contributing
